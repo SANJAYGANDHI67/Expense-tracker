@@ -1,0 +1,37 @@
+# Expense Tracker
+
+A full-stack Expense Tracker built using HTML, CSS, JavaScript and Supabase.
+
+## Features
+
+- Add Expense
+- Delete Expense
+- Budget Tracker
+- Remaining Budget
+- Progress Bar
+- Search Expenses
+- Category Filter
+- Sort Expenses
+- Expense Date Tracking
+- Monthly Report
+- Last 7 Days Report
+- CSV Download
+- Pie Chart Analytics
+- Supabase Database Integration
+
+## Technologies Used
+
+- HTML
+- CSS
+- JavaScript
+- Supabase
+- Chart.js
+- GitHub Pages
+
+## Live Demo
+
+https://sanjaygandhi67.github.io/Expense-tracker/
+
+## Author
+
+Sanjay Gandhi
