@@ -1,4 +1,18 @@
-// Get HTML Elements
+// =========================
+// SUPABASE CONFIG
+// =========================
+
+const supabaseUrl = "https://cytuhessunewtrcypwji.supabase.co/rest/v1/";
+const supabaseKey = "sb_publishable_BfOL6m8SxsrU-2Fm7EN8UQ_kPCBqc6SY";
+
+const supabaseClient = supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+);
+
+// =========================
+// HTML ELEMENTS
+// =========================
 
 const expenseName = document.getElementById("expenseName");
 const expenseAmount = document.getElementById("expenseAmount");
@@ -7,16 +21,20 @@ const addExpenseBtn = document.getElementById("addExpenseBtn");
 const expenseList = document.getElementById("expenseList");
 const totalAmount = document.getElementById("totalAmount");
 
-// Load expenses from localStorage
-let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+// Store expenses from database
+let expenses = [];
 
-// Display expenses when page loads
-displayExpenses();
+// =========================
+// LOAD EXPENSES ON PAGE LOAD
+// =========================
 
-/*
-    Add Expense
-*/
-addExpenseBtn.addEventListener("click", () => {
+loadExpenses();
+
+// =========================
+// ADD EXPENSE
+// =========================
+
+addExpenseBtn.addEventListener("click", async () => {
 
     const name = expenseName.value.trim();
     const amount = expenseAmount.value;
@@ -28,8 +46,8 @@ addExpenseBtn.addEventListener("click", () => {
         return;
     }
 
-    if (amount === "" || amount <= 0) {
-        alert("Please enter valid amount");
+    if (amount === "" || Number(amount) <= 0) {
+        alert("Please enter a valid amount");
         return;
     }
 
@@ -38,36 +56,53 @@ addExpenseBtn.addEventListener("click", () => {
         return;
     }
 
-    // Expense Object
-    const expense = {
-        id: Date.now(),
-        name,
-        amount: Number(amount),
-        category
-    };
+    // Insert into Supabase
+    const { error } = await supabaseClient
+        .from("Expense")
+        .insert([
+            {
+                name: name,
+                amount: Number(amount),
+                category: category
+            }
+        ]);
 
-    expenses.push(expense);
-
-    saveExpenses();
+    if (error) {
+        console.error(error);
+        alert("Failed to add expense");
+        return;
+    }
 
     clearInputs();
 
-    displayExpenses();
+    loadExpenses();
 });
 
-/*
-    Save to Local Storage
-*/
-function saveExpenses() {
-    localStorage.setItem(
-        "expenses",
-        JSON.stringify(expenses)
-    );
+// =========================
+// LOAD EXPENSES
+// =========================
+
+async function loadExpenses() {
+
+    const { data, error } = await supabaseClient
+        .from("Expense")
+        .select("*")
+        .order("id", { ascending: false });
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    expenses = data || [];
+
+    displayExpenses();
 }
 
-/*
-    Display Expenses
-*/
+// =========================
+// DISPLAY EXPENSES
+// =========================
+
 function displayExpenses() {
 
     expenseList.innerHTML = "";
@@ -76,7 +111,7 @@ function displayExpenses() {
 
     expenses.forEach((expense) => {
 
-        total += expense.amount;
+        total += Number(expense.amount);
 
         const expenseCard = document.createElement("div");
 
@@ -85,12 +120,8 @@ function displayExpenses() {
         expenseCard.innerHTML = `
             <div class="expense-info">
                 <h3>${expense.name}</h3>
-                <p>
-                    Category: ${expense.category}
-                </p>
-                <p>
-                    Amount: ₹${expense.amount}
-                </p>
+                <p>Category: ${expense.category}</p>
+                <p>Amount: ₹${expense.amount}</p>
             </div>
 
             <button
@@ -107,24 +138,32 @@ function displayExpenses() {
     totalAmount.textContent = `₹${total}`;
 }
 
-/*
-    Delete Expense
-*/
-function deleteExpense(id) {
+// =========================
+// DELETE EXPENSE
+// =========================
 
-    expenses = expenses.filter(
-        expense => expense.id !== id
-    );
+async function deleteExpense(id) {
 
-    saveExpenses();
+    const { error } = await supabaseClient
+        .from("Expense")
+        .delete()
+        .eq("id", id);
 
-    displayExpenses();
+    if (error) {
+        console.error(error);
+        alert("Failed to delete expense");
+        return;
+    }
+
+    loadExpenses();
 }
 
-/*
-    Clear Inputs
-*/
+// =========================
+// CLEAR INPUTS
+// =========================
+
 function clearInputs() {
+
     expenseName.value = "";
     expenseAmount.value = "";
     expenseCategory.value = "";
