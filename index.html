@@ -25,6 +25,8 @@
                 >
             </div>
 
+            
+
             <div class="input-group">
                 <input
                     type="number"
@@ -32,6 +34,12 @@
                     placeholder="Enter amount"
                 >
             </div>
+            <div class="input-group">
+    <input
+        type="date"
+        id="expenseDate"
+    >
+</div>
 
             <div class="input-group">
                 <select id="expenseCategory">
@@ -52,22 +60,127 @@
 
         <!-- Total Amount -->
         <div class="total-card">
+            <div class="total-card">
+    <h2>Monthly Budget</h2>
+
+    <div class="total-card">
+    <h2>Expense Breakdown</h2>
+    <canvas id="expenseChart"></canvas>
+</div>
+
+    <input
+        type="number"
+        id="budgetInput"
+        placeholder="Enter Budget"
+    >
+
+    <button id="saveBudgetBtn">
+        Save Budget
+    </button>
+
+
+
+    <h3 id="remainingBudget">
+        Remaining: ₹0
+    </h3>
+    <div class="progress-container">
+    <div id="progressBar"></div>
+</div>
+
+<p id="budgetPercent">0% Used</p>
+</div>
             <h2>Total Spent</h2>
             <p id="totalAmount">₹0</p>
         </div>
+
+
+
+
+
+
+
+        <div class="card">
+
+    <div class="card">
+
+    <input
+        type="text"
+        id="searchExpense"
+        placeholder="Search expense..."
+    >
+
+    <br><br>
+
+    <select id="filterCategory">
+
+        <option value="All">All Categories</option>
+        <option value="Food">Food</option>
+        <option value="Travel">Travel</option>
+        <option value="Shopping">Shopping</option>
+        <option value="Bills">Bills</option>
+        <option value="Other">Other</option>
+
+    </select>
+
+    <br><br>
+
+    <select id="sortExpense">
+
+        <option value="latest">Latest First</option>
+        <option value="oldest">Oldest First</option>
+        <option value="high">Highest Amount</option>
+        <option value="low">Lowest Amount</option>
+
+    </select>
+
+    <div class="card">
+
+    <select id="reportMonth">
+
+        <option value="last7days">
+            Last 7 Days
+        </option>
+
+        <option value="0">January</option>
+        <option value="1">February</option>
+        <option value="2">March</option>
+        <option value="3">April</option>
+        <option value="4">May</option>
+        <option value="5">June</option>
+        <option value="6">July</option>
+        <option value="7">August</option>
+        <option value="8">September</option>
+        <option value="9">October</option>
+        <option value="10">November</option>
+        <option value="11">December</option>
+
+    </select>
+
+    <button id="monthlyReportBtn">
+        Monthly Report
+    </button>
+
+</div>
+
+
 
         <!-- Expense List -->
         <div class="expense-list" id="expenseList">
 
         </div>
-
+  <button id="downloadCsvBtn">
+    Download CSV
+</button>
     </div>
 
     <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- JavaScript File -->
     <script src="script.js"></script>
+
 
 </body>
 </html>

@@ -138,3 +138,26 @@ button:hover {
         width: 100%;
     }
 }
+/* Budget Progress Bar */
+
+.progress-container {
+    width: 100%;
+    height: 20px;
+    background: #ddd;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+#progressBar {
+    width: 0%;
+    height: 100%;
+    background: #16a34a;
+    transition: 0.3s;
+}
+
+#budgetPercent {
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+}
